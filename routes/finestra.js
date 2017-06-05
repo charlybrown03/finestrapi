@@ -33,17 +33,18 @@ module.exports = function (app) {
   }
 
   addDrink = function (req, res) {
-    const code = req.body.code
-    const name = req.body.name
-
     connection.query('INSERT INTO drinks (code, name) VALUES (?, ?)',
-      [ code, name ],
+      [ req.body.code, req.body.name ],
       function (err, response) {
         if (!err) {
           var req = {
             params: { id: response.insertId }
           }
-          res.send({ code: code, name: name, id: response.insertId })
+          res.send({
+            code: req.body.code,
+            name: req.body.name,
+            id: response.insertId
+          })
         } else {
           res.statusCode = 409
           res.send({ message: 'Error creating new drink' })
