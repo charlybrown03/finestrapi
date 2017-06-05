@@ -1,0 +1,15 @@
+{
+  "name": "node-api-rest-example",
+  "repository": "git@github.com:charlybrown03/finestrapi.git",
+  "version": "0.0.1",
+  "dependencies": {
+    "cors": "^2.8.1",
+    "express": "3.2.6",
+    "moment": "^2.15.1",
+    "mysql": "^2.11.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.8.1",
+    "eslint-plugin-standard": "^2.0.1"
+  }
+}

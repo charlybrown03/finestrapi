@@ -1,0 +1,28 @@
+{
+  "installedESLint": true,
+  "extends": "standard",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "plugins": [
+    "standard",
+    "promise"
+  ],
+  "globals": {
+    "$": true,
+    "$YB": true,
+    "_": true,
+    "App": true,
+    "Backbone": true,
+    "ColorHash": true,
+    "Highcharts": true,
+    "Marionette": true,
+    "Radio": true,
+    "alert": true,
+    "google": true,
+    "localStorage": true,
+    "moment": true
+  }
+}
