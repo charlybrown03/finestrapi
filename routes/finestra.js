@@ -40,20 +40,28 @@ module.exports = function (app) {
           var req = {
             params: { id: response.insertId }
           }
-          res.send({
-            code: req.body.code,
-            name: req.body.name,
-            id: response.insertId
-          })
+          this.findById(req, res)
         } else {
           res.statusCode = 409
           res.send({ message: 'Error creating new drink' })
         }
       }.bind(this))
+  },
+
+  // GET - Return a Heart with specified ID
+  findById = function(req, res) {
+    connection.query('SELECT * FROM drinks WHERE id = ?', req.params.id, function (err, drink) {
+      if (!err) {
+        res.send(drink)
+      } else {
+        res.statusCode = 404
+        res.send({ message: 'This drink don\'t exist' })
+      }
+    })
   }
 
   // app.get('/hearts', cors(corsOptions), findAllHearts)
-  // app.get('/heart/:id', cors(corsOptions), findById)
+  app.get('/drink/:id', cors(corsOptions), findById)
   app.post('/drink', cors(corsOptions), addDrink)
   // app.patch('/heart/:id', cors(corsOptions), updateHeart)
   // app.delete('/heart/:id', cors(corsOptions), deleteHeart)
