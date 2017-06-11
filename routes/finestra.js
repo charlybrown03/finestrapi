@@ -1,6 +1,6 @@
 var config = require('../config')
 
-module.exports = function (app) {
+module.exports = (app) => {
 
   var cors = require('cors');
   var mysql = require('mysql')
@@ -8,7 +8,7 @@ module.exports = function (app) {
 
   var connection = mysql.createConnection(config())
 
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -32,7 +32,7 @@ module.exports = function (app) {
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 
-  addDrink = function (req, res) {
+  addDrink = (req, res) => {
     connection.query('INSERT INTO drinks (code, name) VALUES (?, ?)',
       [ req.body.code, req.body.name ],
       function (err, response) {
@@ -49,7 +49,7 @@ module.exports = function (app) {
   },
 
   // GET - Return a Heart with specified ID
-  findById = function(req, res) {
+  findById = (req, res) => {
     connection.query('SELECT * FROM drinks WHERE id = ?', req.params.id, function (err, drink) {
       if (!err) {
         res.send(drink)
