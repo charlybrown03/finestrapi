@@ -1,38 +1,36 @@
-var config = require('../config')
+const config = require('../config')
 
 module.exports = (app) => {
+  const cors = require('cors')
+  const mysql = require('mysql')
 
-  var cors = require('cors');
-  var mysql = require('mysql')
-  var moment   = require('moment');
-
-  var connection = mysql.createConnection(config())
+  const connection = mysql.createConnection(config())
 
   app.use((req, res, next) => {
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*')
 
     // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
 
     // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Credentials', true)
 
     // Pass to next layer of middleware
-    next();
+    next()
   })
 
-  var corsOptions = {
+  const corsOptions = {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 
-  addDrink = (req, res) => {
+  const addDrink = (req, res) => {
     connection.query('INSERT INTO drinks (code, name) VALUES (?, ?)',
       [ req.body.code, req.body.name ],
       function (err, response) {
@@ -46,10 +44,10 @@ module.exports = (app) => {
           res.send({ message: 'Error creating new drink' })
         }
       }.bind(this))
-  },
+  }
 
-  // GET - Return a Heart with specified ID
-  findById = (req, res) => {
+  // GET - Return a Drink with specified ID
+  const findById = (req, res) => {
     connection.query('SELECT * FROM drinks WHERE id = ?', req.params.id, function (err, drink) {
       if (!err) {
         res.send(drink)
@@ -77,7 +75,7 @@ module.exports = (app) => {
   //       res.send({ message: 'You don\'t have any heart yet' })
   //     }
   //   })
-  // };
+  // }
 
   // // GET - Return a Heart with specified ID
   // findById = function(req, res) {
@@ -142,5 +140,4 @@ module.exports = (app) => {
   // app.patch('/heart/:id', cors(corsOptions), updateHeart)
   // app.delete('/heart/:id', cors(corsOptions), deleteHeart)
   // app.options('/heart/:id', cors(corsOptions))
-
 }

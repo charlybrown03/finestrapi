@@ -1,28 +1,17 @@
 {
-  "installedESLint": true,
-  "extends": "standard",
-  "env": {
-    "browser": true,
-    "node": true
-  },
   "parser": "babel-eslint",
+  "extends": [
+    "standard"
+  ],
   "plugins": [
-    "standard",
+    "babel",
     "promise"
   ],
-  "globals": {
-    "$": true,
-    "$YB": true,
-    "_": true,
-    "App": true,
-    "Backbone": true,
-    "ColorHash": true,
-    "Highcharts": true,
-    "Marionette": true,
-    "Radio": true,
-    "alert": true,
-    "google": true,
-    "localStorage": true,
-    "moment": true
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "max-len": [ 2, 100, 2],
+    "object-curly-spacing": [2, "always" ]
   }
 }
