@@ -66,7 +66,7 @@ module.exports = (app) => {
   // GET - Return a Drink with specified ID
   const findById = (req, res) => {
     connection.query('SELECT * FROM drinks WHERE id = ?', req.params.id, (err, drink) => {
-      if (!err) {
+      if (!err && drink.length) {
         res.send(drink)
       } else {
         res.statusCode = 404
