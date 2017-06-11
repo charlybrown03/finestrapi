@@ -80,12 +80,17 @@ module.exports = (app) => {
    **/
 
   const getGuests = (req, res) => {
-    connection.query('SELECT * FROM guests', (err, drink) => {
+    connection.query('SELECT * FROM guests', (err, guests) => {
       if (!err) {
-        res.send(drink)
+        if (!guests.length) {
+          res.statusCode = 404
+          res.send({ message: 'Not guests yet' })
+          return
+        }
+        res.send(guests)
       } else {
-        res.statusCode = 404
-        res.send({ message: 'Not guests yet' })
+        res.statusCode = 500
+        res.send({ message: 'Opss! Something went wrong!' })
       }
     })
   }
