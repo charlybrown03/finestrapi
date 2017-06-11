@@ -46,9 +46,20 @@ module.exports = (app) => {
       }.bind(this))
   }
 
+  const getDrinks = (req, res) => {
+    connection.query('SELECT * FROM drinks', (err, drink) => {
+      if (!err) {
+        res.send(drink)
+      } else {
+        res.statusCode = 404
+        res.send({ message: 'This drink don\'t exist' })
+      }
+    })
+  }
+
   // GET - Return a Drink with specified ID
   const findById = (req, res) => {
-    connection.query('SELECT * FROM drinks WHERE id = ?', req.params.id, function (err, drink) {
+    connection.query('SELECT * FROM drinks WHERE id = ?', req.params.id, (err, drink) => {
       if (!err) {
         res.send(drink)
       } else {
@@ -60,6 +71,7 @@ module.exports = (app) => {
 
   // app.get('/hearts', cors(corsOptions), findAllHearts)
   app.get('/drink/:id', cors(corsOptions), findById)
+  app.get('/drinks', cors(corsOptions), getDrinks)
   app.post('/drink', cors(corsOptions), addDrink)
   // app.patch('/heart/:id', cors(corsOptions), updateHeart)
   // app.delete('/heart/:id', cors(corsOptions), deleteHeart)
