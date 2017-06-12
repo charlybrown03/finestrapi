@@ -26,12 +26,6 @@ app.configure(() => {
   })
 })
 
-app.get('/', (req, res) => {
-  res.send('Out there!')
-})
+require('./routes/router')(app)
 
-require('./routes/finestra')(app)
-
-server.listen(8080, () => {
-  console.log('Node server running on http://localhost:8080')
-})
+server.listen(8080)
