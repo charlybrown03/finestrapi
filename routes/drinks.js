@@ -3,10 +3,11 @@ const ERROR_MESSAGE = 'Opss, something went wrong!'
 module.exports = (app, connection, cors, corsOptions) => {
   // POST - Create new drink
   const addDrink = (req, res) => {
-    connection.query('INSERT INTO drinks (code, name) VALUES (?, ?)',
+    connection.query('INSERT INTO drinks VALUES (?, ?)',
       [ req.body.code, req.body.name ],
       function (err, response) {
         if (!err) {
+          console.info(response)
           var req = {
             params: { id: response.insertId }
           }
@@ -24,14 +25,12 @@ module.exports = (app, connection, cors, corsOptions) => {
       if (!err) {
         if (!drinks.length) {
           res.statusCode = 404
-          res.send({ message: 'Not drinks yet' })
-          return
+          return res.send({ message: 'Not drinks yet' })
         }
-        res.send(drinks)
-      } else {
-        res.statusCode = 500
-        res.send({ message: ERROR_MESSAGE })
+        return res.send(drinks)
       }
+
+      sendError(res)
     })
   }
 
@@ -41,14 +40,18 @@ module.exports = (app, connection, cors, corsOptions) => {
       if (!err) {
         if (!drink.length) {
           res.statusCode = 404
-          res.send({ message: 'This drink does not exist' })
+          return res.send({ message: 'This drink does not exist' })
         }
-        res.send(drink)
-      } else {
-        res.statusCode = 500
-        res.send({ message: ERROR_MESSAGE })
+        return res.send(drink[0])
       }
+
+      sendError(res)
     })
+  }
+
+  const sendError = (res) => {
+    res.statusCode = 500
+    res.send({ message: ERROR_MESSAGE })
   }
 
   app.post('/drink', cors(corsOptions), addDrink)
