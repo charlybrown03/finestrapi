@@ -1,7 +1,8 @@
 const ERROR_MESSAGE = 'Opss, something went wrong!'
 
-const ADD_DRINK = 'INSERT INTO (code, name) drinks VALUES (?, ?)'
-const FIND_BY_ID = 'SELECT code, name FROM drinks WHERE code = ?'
+const ADD_DRINK = 'INSERT INTO drinks (code, name) VALUES (?, ?)'
+const FIND_BY_ID = 'SELECT code, name FROM drinks WHERE id = ?'
+const FIND_BY_CODE = 'SELECT code, name FROM drinks WHERE code = ?'
 const GET_DRINKS = 'SELECT * FROM drinks'
 
 module.exports = (app, connection, cors, corsOptions) => {
