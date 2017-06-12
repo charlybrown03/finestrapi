@@ -1,32 +1,38 @@
 const ERROR_MESSAGE = 'Opss, something went wrong!'
 
+const ADD_DRINK = 'INSERT INTO (code, name) drinks VALUES (?, ?)'
+const FIND_BY_ID = 'SELECT code, name FROM drinks WHERE code = ?'
+const GET_DRINKS = 'SELECT * FROM drinks'
+
 module.exports = (app, connection, cors, corsOptions) => {
   // POST - Create new drink
   const addDrink = (req, res) => {
-    connection.query('INSERT INTO drinks VALUES (?, ?)',
-      [ req.body.code, req.body.name ],
-      function (err, response) {
-        if (!err) {
-          console.info(response)
-          var req = {
-            params: { id: response.insertId }
+    const queryParams = [ req.body.code, req.body.name ]
+
+    connection.query(ADD_DRINK, queryParams, (err, response) => {
+      if (!err) {
+        const req = {
+          params: {
+            id: response.insertId
           }
-          this.findById(req, res)
-        } else {
-          res.statusCode = 409
-          res.send({ message: 'Error creating new drink' })
         }
-      }.bind(this))
+
+        return this.findById(req, res)
+      }
+
+      sendError(res)
+    })
   }
 
   // GET - Get all drinks
   const getDrinks = (req, res) => {
-    connection.query('SELECT * FROM drinks', (err, drinks) => {
+    connection.query(GET_DRINKS, (err, drinks) => {
       if (!err) {
         if (!drinks.length) {
           res.statusCode = 404
           return res.send({ message: 'Not drinks yet' })
         }
+
         return res.send(drinks)
       }
 
@@ -36,12 +42,13 @@ module.exports = (app, connection, cors, corsOptions) => {
 
   // GET - Return a drink with specified ID
   const findById = (req, res) => {
-    connection.query('SELECT * FROM drinks WHERE code = ?', req.params.code, (err, drink) => {
+    connection.query(FIND_BY_ID, req.params.code, (err, drink) => {
       if (!err) {
         if (!drink.length) {
           res.statusCode = 404
           return res.send({ message: 'This drink does not exist' })
         }
+
         return res.send(drink[0])
       }
 
