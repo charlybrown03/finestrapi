@@ -3,11 +3,11 @@ const ERROR_MESSAGE = 'Opss, something went wrong!'
 const ADD_DRINK = 'INSERT INTO drinks (code, name) VALUES (?, ?)'
 const FIND_BY_ID = 'SELECT code, name FROM drinks WHERE id = ?'
 const FIND_BY_CODE = 'SELECT code, name FROM drinks WHERE code = ?'
-const GET_DRINKS = 'SELECT * FROM drinks'
+const GET_DRINKS = 'SELECT code, name FROM drinks'
 
 module.exports = (app, connection, cors, corsOptions) => {
   // POST - Create new drink
-  const addDrink = (req, res) => {
+  const add = (req, res) => {
     const queryParams = [ req.body.code, req.body.name ]
 
     connection.query(ADD_DRINK, queryParams, (err, response) => {
@@ -26,7 +26,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   }
 
   // GET - Get all drinks
-  const getDrinks = (req, res) => {
+  const get = (req, res) => {
     connection.query(GET_DRINKS, (err, drinks) => {
       if (!err) {
         if (!drinks.length) {
@@ -52,14 +52,14 @@ module.exports = (app, connection, cors, corsOptions) => {
   }
 
   const _getOne = (params, res, query) => {
-    connection.query(query, params, (err, drink) => {
+    connection.query(query, params, (err, drinks) => {
       if (!err) {
-        if (!drink.length) {
+        if (!drinks.length) {
           res.statusCode = 404
           return res.send({ message: 'This drink does not exist' })
         }
 
-        return res.send(drink[0])
+        return res.send(drinks[0])
       }
 
       _sendError(res)
@@ -71,7 +71,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     res.send({ message: ERROR_MESSAGE })
   }
 
-  app.post('/drink', cors(corsOptions), addDrink)
+  app.post('/drink', cors(corsOptions), add)
   app.get('/drink/:code', cors(corsOptions), findByCode)
-  app.get('/drinks', cors(corsOptions), getDrinks)
+  app.get('/drinks', cors(corsOptions), get)
 }

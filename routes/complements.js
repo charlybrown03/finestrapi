@@ -1,6 +1,6 @@
 module.exports = (app, connection, cors, corsOptions) => {
   // GET - Get all complements
-  const getComplements = (req, res) => {
+  const get = (req, res) => {
     connection.query('SELECT * FROM complements', (err, complements) => {
       if (!err) {
         if (!complements.length) {
@@ -16,5 +16,5 @@ module.exports = (app, connection, cors, corsOptions) => {
     })
   }
 
-  app.get('/complements', cors(corsOptions), getComplements)
+  app.get('/complements', cors(corsOptions), get)
 }
