@@ -18,10 +18,10 @@ module.exports = (app, connection, cors, corsOptions) => {
           }
         }
 
-        return this.findById(req, res)
+        return findById(req, res)
       }
 
-      sendError(res)
+      _sendError(res)
     })
   }
 
@@ -37,13 +37,22 @@ module.exports = (app, connection, cors, corsOptions) => {
         return res.send(drinks)
       }
 
-      sendError(res)
+      _sendError(res)
     })
   }
 
   // GET - Return a drink with specified ID
   const findById = (req, res) => {
-    connection.query(FIND_BY_ID, req.params.code, (err, drink) => {
+    _getOne(req.params.id, res, FIND_BY_ID)
+  }
+
+  // GET - Return a drink with specified CODE
+  const findByCode = (req, res) => {
+    _getOne(req.params.code, res, FIND_BY_CODE)
+  }
+
+  const _getOne = (params, res, query) => {
+    connection.query(query, params, (err, drink) => {
       if (!err) {
         if (!drink.length) {
           res.statusCode = 404
@@ -53,16 +62,16 @@ module.exports = (app, connection, cors, corsOptions) => {
         return res.send(drink[0])
       }
 
-      sendError(res)
+      _sendError(res)
     })
   }
 
-  const sendError = (res) => {
+  const _sendError = (res) => {
     res.statusCode = 500
     res.send({ message: ERROR_MESSAGE })
   }
 
   app.post('/drink', cors(corsOptions), addDrink)
-  app.get('/drink/:code', cors(corsOptions), findById)
+  app.get('/drink/:code', cors(corsOptions), findByCode)
   app.get('/drinks', cors(corsOptions), getDrinks)
 }
