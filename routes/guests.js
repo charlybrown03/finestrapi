@@ -78,6 +78,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   }
 
   app.post('/guest', cors(corsOptions), add)
+  app.options('/guest', cors(corsOptions))
   app.get('/guest/:id', cors(corsOptions), findById)
   app.get('/guests', cors(corsOptions), get)
 }
