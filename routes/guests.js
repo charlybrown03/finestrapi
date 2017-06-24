@@ -1,6 +1,6 @@
 const ERROR_MESSAGE = 'Opss, something went wrong!'
-const NOT_FOUND_PLURAL = 'Not guests yet'
-const NOT_FOUND_SINGLE = 'This guest does not exist'
+// const NOT_FOUND_PLURAL = 'Not guests yet'
+// const NOT_FOUND_SINGLE = 'This guest does not exist'
 
 const GUEST_ATTRIBUTES = `id, name, surname,
                           drink_code AS drinkCode,
@@ -23,6 +23,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     ]
 
     connection.query(ADD_GUEST, queryParams, (err, guest) => {
+      console.info('CREATE NEW GUEST')
       if (!err) {
         const req = {
           params: {
@@ -40,10 +41,11 @@ module.exports = (app, connection, cors, corsOptions) => {
   // GET - All guests
   const get = (req, res) => {
     connection.query(GET_GUESTS, (err, guests) => {
+      console.info('GET ALL GUESTS')
       if (!err) {
         if (!guests.length) {
-          res.statusCode = 404
-          return res.send({ message: NOT_FOUND_PLURAL })
+          res.statusCode = 204
+          return res.send([])
         }
         return res.send(guests)
       }
@@ -59,10 +61,11 @@ module.exports = (app, connection, cors, corsOptions) => {
 
   const _getOne = (params, res, query) => {
     connection.query(query, params, (err, guests) => {
+      console.info('GET ONE GUEST')
       if (!err) {
         if (!guests.length) {
-          res.statusCode = 404
-          return res.send({ message: NOT_FOUND_SINGLE })
+          res.statusCode = 204
+          return res.send({})
         }
 
         return res.send(guests[0])

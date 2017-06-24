@@ -2,10 +2,11 @@ module.exports = (app, connection, cors, corsOptions) => {
   // GET - Get all complements
   const get = (req, res) => {
     connection.query('SELECT * FROM complements', (err, complements) => {
+      console.info('GET ALL COMPLEMENTS')
       if (!err) {
         if (!complements.length) {
-          res.statusCode = 404
-          res.send({ message: 'Not complements yet' })
+          res.statusCode = 204
+          res.send([])
           return
         }
         res.send(complements)
