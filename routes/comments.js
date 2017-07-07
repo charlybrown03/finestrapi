@@ -1,5 +1,5 @@
 const ADD_COMMENT = 'INSERT INTO comments (comment, author) values (?, ?)'
-const GET_ALL = 'SELECT * FROM comments'
+const GET_ALL = 'SELECT * FROM comments ORDER BY id desc'
 
 const FIND_BY_ID = `SELECT * FROM comments WHERE id = ?`
 
@@ -12,6 +12,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     ]
 
     connection.query(ADD_COMMENT, queryParams, (err, comment) => {
+      console.info('ADD NEW COMMENT')
       if (!err) {
         const req = {
           params: {
@@ -27,7 +28,7 @@ module.exports = (app, connection, cors, corsOptions) => {
 
   // GET - Get all comments
   const get = (req, res) => {
-    console.info('GET ALL GUESTS')
+    console.info('GET ALL COMMENTS')
     connection.query(GET_ALL, (err, comments) => {
       if (!err) return res.send(comments)
 
