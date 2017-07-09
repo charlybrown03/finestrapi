@@ -2,7 +2,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   // GET - Get all complements
   const get = (req, res) => {
     connection.query('SELECT * FROM complements', (err, complements) => {
-      console.info('GET ALL COMPLEMENTS')
+      console.info('GET ALL COMPLEMENTS', new Date())
       if (!err) {
         if (!complements.length) {
           res.statusCode = 204
