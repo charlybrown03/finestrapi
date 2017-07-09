@@ -23,7 +23,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     ]
 
     connection.query(ADD_GUEST, queryParams, (err, guest) => {
-      console.info('CREATE NEW GUEST', new Date())
+      console.info('CREATE NEW GUEST', new Date().toLocaleString())
       if (!err) {
         const req = {
           params: {
@@ -41,7 +41,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   // GET - All guests
   const get = (req, res) => {
     connection.query(GET_GUESTS, (err, guests) => {
-      console.info('GET ALL GUESTS', new Date())
+      console.info('GET ALL GUESTS', new Date().toLocaleString())
       if (!err) {
         if (!guests.length) {
           res.statusCode = 204
@@ -61,7 +61,7 @@ module.exports = (app, connection, cors, corsOptions) => {
 
   const _getOne = (params, res, query) => {
     connection.query(query, params, (err, guests) => {
-      console.info('GET ONE GUEST', new Date())
+      console.info('GET ONE GUEST', new Date().toLocaleString())
       if (!err) {
         if (!guests.length) {
           res.statusCode = 204

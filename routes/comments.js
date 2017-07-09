@@ -12,7 +12,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     ]
 
     connection.query(ADD_COMMENT, queryParams, (err, comment) => {
-      console.info('ADD NEW COMMENT', new Date())
+      console.info('ADD NEW COMMENT', new Date().toLocaleString())
       if (!err) {
         const req = {
           params: {
@@ -28,7 +28,7 @@ module.exports = (app, connection, cors, corsOptions) => {
 
   // GET - Get all comments
   const get = (req, res) => {
-    console.info('GET ALL COMMENTS', new Date())
+    console.info('GET ALL COMMENTS', new Date().toLocaleString())
     connection.query(GET_ALL, (err, comments) => {
       if (!err) return res.send(comments)
 
@@ -39,7 +39,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   // GET - Find one by id
   const findById = (req, res) => {
     connection.query(FIND_BY_ID, req.params.id, (err, comments) => {
-      console.info('GET ONE COMMENT', new Date())
+      console.info('GET ONE COMMENT', new Date().toLocaleString())
       if (!err) return res.send(comments[0] || {})
 
       _sendError(res)

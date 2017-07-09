@@ -11,7 +11,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     const queryParams = [ req.body.code, req.body.name ]
 
     connection.query(ADD_DRINK, queryParams, (err, response) => {
-      console.info('CREATE NEW DRI, new Date()NK')
+      console.info('CREATE NEW DRI, new Date().toLocaleString()NK')
       if (!err) {
         const req = {
           params: {
@@ -29,7 +29,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   // GET - Get all drinks
   const get = (req, res) => {
     connection.query(GET_DRINKS, (err, drinks) => {
-      console.info('GET ALL DRINKS, new Date()')
+      console.info('GET ALL DRINKS, new Date().toLocaleString()')
       if (!err) {
         if (!drinks.length) {
           res.statusCode = 204
@@ -55,7 +55,7 @@ module.exports = (app, connection, cors, corsOptions) => {
 
   const _getOne = (params, res, query) => {
     connection.query(query, params, (err, drinks) => {
-      console.info('GET ONE DRINK', new Date())
+      console.info('GET ONE DRINK', new Date().toLocaleString())
       if (!err) {
         if (!drinks.length) {
           res.statusCode = 204
