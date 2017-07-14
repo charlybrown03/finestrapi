@@ -11,7 +11,7 @@ module.exports = (app, connection, cors, corsOptions) => {
     const queryParams = [ req.body.code, req.body.name ]
 
     connection.query(ADD_DRINK, queryParams, (err, response) => {
-      console.info('CREATE NEW DRI, new Date().toLocaleString()NK')
+      console.info('CREATE NEW DRINK, new Date().toLocaleString()')
       if (!err) {
         const req = {
           params: {
