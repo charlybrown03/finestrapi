@@ -35,6 +35,11 @@ module.exports = (app, connection, cors, corsOptions) => {
     })
   }
 
+  const _sendError = (res) => {
+    res.statusCode = 500
+    res.send({ message: ERROR_MESSAGE })
+  }
+
   app.get('/complements', cors(corsOptions), get)
   app.get('/complements/count', cors(corsOptions), getCount)
 }
