@@ -5,6 +5,10 @@ const FIND_BY_ID = 'SELECT code, name FROM drinks WHERE id = ?'
 const FIND_BY_CODE = 'SELECT code, name FROM drinks WHERE code = ?'
 const GET_DRINKS = 'SELECT code, name FROM drinks'
 
+const GET_COUNT = `SELECT d.name AS drink, COUNT(g.drink_code) AS ammount
+                          FROM guests AS g, drinks AS d  WHERE
+                          g.drink_code = d.code GROUP BY drink_code ORDER BY ammount DESC`
+
 module.exports = (app, connection, cors, corsOptions) => {
   // POST - Create new drink
   const add = (req, res) => {
@@ -32,13 +36,26 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ALL DRINKS', new Date().toLocaleString())
       if (!err) {
         if (!drinks.length) {
-          res.statusCode = 204
           return res.send({})
         }
 
         return res.send(drinks)
       }
 
+      _sendError(res)
+    })
+  }
+
+  // GET - Get count
+  const getCount = (req, res) => {
+    connection.query(GET_COUNT, (err, result) => {
+      console.info('GET DRINKS COUNT', new Date().toLocaleString())
+      if (!err) {
+        if (!result.length) {
+          return res.send([])
+        }
+        return res.send(result)
+      }
       _sendError(res)
     })
   }
@@ -58,7 +75,6 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ONE DRINK', new Date().toLocaleString())
       if (!err) {
         if (!drinks.length) {
-          res.statusCode = 204
           return res.send([])
         }
 
@@ -77,4 +93,5 @@ module.exports = (app, connection, cors, corsOptions) => {
   app.post('/drink', cors(corsOptions), add)
   app.get('/drink/:code', cors(corsOptions), findByCode)
   app.get('/drinks', cors(corsOptions), get)
+  app.get('/drinks/count', cors(corsOptions), getCount)
 }

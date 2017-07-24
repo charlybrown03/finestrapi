@@ -44,7 +44,6 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ALL GUESTS', new Date().toLocaleString())
       if (!err) {
         if (!guests.length) {
-          res.statusCode = 204
           return res.send([])
         }
         return res.send(guests)
@@ -64,7 +63,6 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ONE GUEST', new Date().toLocaleString())
       if (!err) {
         if (!guests.length) {
-          res.statusCode = 204
           return res.send({})
         }
 
