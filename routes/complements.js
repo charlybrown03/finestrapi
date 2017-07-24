@@ -1,3 +1,5 @@
+const ERROR_MESSAGE = 'Opss, something went wrong!'
+
 const GET_ALL = 'SELECT * FROM complements'
 const GET_COUNT = `SELECT c.name AS complement, COUNT(g.complement_code) AS ammount
                               FROM guests AS g, complements AS c  WHERE g.complement_code = c.code
