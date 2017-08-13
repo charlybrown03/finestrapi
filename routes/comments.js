@@ -30,7 +30,7 @@ module.exports = (app, connection, cors, corsOptions) => {
   const get = (req, res) => {
     console.info('GET ALL COMMENTS', new Date().toLocaleString())
     connection.query(GET_ALL, (err, comments) => {
-      if (!err) return res.send(comments)
+      if (!err) return _sendResponse(res, comments)
 
       _sendError(res)
     })
@@ -40,15 +40,20 @@ module.exports = (app, connection, cors, corsOptions) => {
   const findById = (req, res) => {
     connection.query(FIND_BY_ID, req.params.id, (err, comments) => {
       console.info('GET ONE COMMENT', new Date().toLocaleString())
-      if (!err) return res.send(comments[0] || {})
+      if (!err) return _sendResponse(res, comments[0] || {})
 
       _sendError(res)
     })
   }
 
+  const _sendResponse = (res, content) => {
+    res.setHeader('Cache-Control', 'max-age=2592000')
+    res.send(content)
+  }
+
   const _sendError = (res) => {
     res.statusCode = 500
-    res.send({ message: 'Opss, something went wrong!' })
+    _sendResponse(res, { message: 'Opss, something went wrong!' })
   }
 
   app.get('/comments', cors(corsOptions), get)

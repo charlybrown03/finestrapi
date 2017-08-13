@@ -12,13 +12,13 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ALL COMPLEMENTS', new Date().toLocaleString())
       if (!err) {
         if (!complements.length) {
-          res.send([])
+          _sendResponse(res, [])
           return
         }
-        res.send(complements)
+        _sendResponse(res, complements)
       } else {
         res.statusCode = 500
-        res.send({ message: 'Opss, something went wrong!' })
+        _sendResponse(res, { message: 'Opss, something went wrong!' })
       }
     })
   }
@@ -29,17 +29,22 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET COMPLEMENTS COUNT', new Date().toLocaleString())
       if (!err) {
         if (!result.length) {
-          return res.send([])
+          return _sendResponse(res, [])
         }
-        return res.send(result)
+        return _sendResponse(res, result)
       }
       _sendError(res)
     })
   }
 
+  const _sendResponse = (res, content) => {
+    res.setHeader('Cache-Control', 'max-age=2592000')
+    res.send(content)
+  }
+
   const _sendError = (res) => {
     res.statusCode = 500
-    res.send({ message: ERROR_MESSAGE })
+    _sendResponse(res, { message: ERROR_MESSAGE })
   }
 
   app.get('/complements', cors(corsOptions), get)

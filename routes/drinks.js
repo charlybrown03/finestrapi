@@ -36,10 +36,10 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ALL DRINKS', new Date().toLocaleString())
       if (!err) {
         if (!drinks.length) {
-          return res.send({})
+          return _sendResponse(res, {})
         }
 
-        return res.send(drinks)
+        return _sendResponse(res, drinks)
       }
 
       _sendError(res)
@@ -52,9 +52,9 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET DRINKS COUNT', new Date().toLocaleString())
       if (!err) {
         if (!result.length) {
-          return res.send([])
+          return _sendResponse(res, [])
         }
-        return res.send(result)
+        return _sendResponse(res, result)
       }
       _sendError(res)
     })
@@ -75,19 +75,24 @@ module.exports = (app, connection, cors, corsOptions) => {
       console.info('GET ONE DRINK', new Date().toLocaleString())
       if (!err) {
         if (!drinks.length) {
-          return res.send([])
+          return _sendResponse(res, [])
         }
 
-        return res.send(drinks[0])
+        return _sendResponse(res, drinks[0])
       }
 
       _sendError(res)
     })
   }
 
+  const _sendResponse = (res, content) => {
+    res.setHeader('Cache-Control', 'max-age=2592000')
+    res.send(content)
+  }
+
   const _sendError = (res) => {
     res.statusCode = 500
-    res.send({ message: ERROR_MESSAGE })
+    _sendResponse(res, { message: ERROR_MESSAGE })
   }
 
   app.post('/drink', cors(corsOptions), add)

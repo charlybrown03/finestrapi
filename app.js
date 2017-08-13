@@ -21,6 +21,9 @@ app.configure(() => {
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true)
 
+    // Cache control
+    res.setHeader('Cache-Control', 'max-age=3600')
+
     // Pass to next layer of middleware
     next()
   })
